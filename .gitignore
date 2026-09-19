@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+*.parquet
+.DS_Store
+dist/
+build/
+*.egg-info/
+# local Claude Code guidance — kept locally, untracked
+CLAUDE.md
