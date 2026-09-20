@@ -3,6 +3,8 @@ __pycache__/
 .venv/
 .env
 *.parquet
+# generated dataset export — attaches to the versioned DOI'd release, not committed
+release/
 .DS_Store
 dist/
 build/

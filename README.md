@@ -132,6 +132,14 @@ verdicts*. The merge-vs-split (precision-vs-recall) tradeoff is documented, not 
 paper's dual-use reflection; the dataset-release policy for this repo is deliberately scoped to
 match it (a Phase-3 decision — see the roadmap).
 
+## Cite & release
+
+The repo maps to the paper's contributions in [`docs/paper-mapping.md`](docs/paper-mapping.md);
+reproducibility is in [`docs/parity.md`](docs/parity.md). To cut a versioned, DOI'd release —
+including the **person-free dataset export** (`bor.export`) — follow
+[`docs/release.md`](docs/release.md). Citation metadata is in [`CITATION.cff`](CITATION.cff) (the
+Zenodo DOI is filled in on the first release).
+
 ## License
 
 MIT.
