@@ -11,3 +11,5 @@ build/
 *.egg-info/
 # local Claude Code guidance — kept locally, untracked
 CLAUDE.md
+# drawn evaluation sample (contains public-record names) — local working artifact
+eval_out/
