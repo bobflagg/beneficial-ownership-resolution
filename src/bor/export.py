@@ -24,8 +24,7 @@ _DICTIONARY = """# Beneficial Ownership Resolution — dataset
 
 Resolved from NYC public records (HPD registrations, ACRIS deeds, PLUTO); see the repo README and
 the paper *"Leads, Not Verdicts."* Every grouping is an **inference** — a lead to verify, not a
-legal determination of ownership. Keyed on BBL (public parcel id) and opaque group ids; contains no
-owner names{names_note}.
+legal determination of ownership. Keyed on BBL (public parcel id) and opaque group ids; {names_clause}.
 
 ## Files
 
@@ -73,10 +72,13 @@ def export(conn, out_dir: str, *, include_names: bool = False,
     _write("operational_network_bbls.csv", ["bbl", "portfolio_id"],
            [[bbl, n.portfolio_id] for n in nets for bbl in n.bbls])
 
-    names_note = "" if include_names else " (names withheld — see bor.export)"
+    names_clause = (
+        "and **includes owner names** (person anchors) — this is a person-linked release"
+        if include_names else
+        "and contains **no owner names** (names withheld — the sensitive join)")
     name_col = ", `name` (person anchor — INCLUDED in this build)" if include_names else ""
     with open(os.path.join(out_dir, "DATA.md"), "w") as f:
-        f.write(_DICTIONARY.format(names_note=names_note, name_col=name_col))
+        f.write(_DICTIONARY.format(names_clause=names_clause, name_col=name_col))
 
     manifest = {
         "owner_groups": len(groups),
