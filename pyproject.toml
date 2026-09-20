@@ -47,7 +47,16 @@ packages = ["src/bor"]
 "src/bor/sql/landlords_with_connections.sql" = "bor/sql/landlords_with_connections.sql"
 
 [dependency-groups]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py313"
+
+[tool.ruff.lint]
+# Pyflakes only — real issues (unused imports, undefined names). Style/import-order rules are left
+# off: several modules are vendored byte-faithfully from WatchlineNYC/WoW and we keep them as-is.
+select = ["F"]

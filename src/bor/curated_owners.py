@@ -34,7 +34,6 @@ edges in that check.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from itertools import combinations
 
 import pandas as pd
 
