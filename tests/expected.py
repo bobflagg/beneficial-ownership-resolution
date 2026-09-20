@@ -1,0 +1,28 @@
+"""Frozen regression targets, validated against the reference `justfixwow` dump and the live
+WatchlineNYC knowledge graph (see docs/parity.md).
+
+The deed layer is deterministic given the data → exact. Everything downstream of Splink jitters
+~0.05% run-to-run (u-sampling over DuckDB), so those counts are checked with a tolerance.
+"""
+
+# Deterministic (no Splink) — exact.
+DEED_EDGES = 941
+DEED_NODES = 1542
+
+# Owner groups (Splink-dependent → tolerant).
+OWNER_GROUPS = 6522
+OWNER_GROUP_NODES = 15621
+COMPOSITION = {"identity": 6449, "deed_only": 61, "deed_bridged": 12}
+
+# Operational network (Splink + Louvain tail → tolerant).
+OPERATIONAL_NETWORKS_MULTI = 9672   # components with >= 2 members
+
+# Divergence vs Who Owns What.
+OWNERS_CROSSING = 760
+PORTFOLIOS_HIDING = 616
+
+# lwc substrate (reference dump).
+LWC_NODES = 118_493
+
+# Absolute tolerance for Splink-jittered counts (~0.05% of ~15-30k ≈ a few dozen).
+TOL = 30
