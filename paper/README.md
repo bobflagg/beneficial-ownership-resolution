@@ -15,7 +15,8 @@ it directly (`python -m bor.eval.divergence`, `docs/parity.md`).
 - **`sections/`** — drafted paper-body sections. `sections/methods.md` — the Methods section (data,
   the three-layer model, the resolution ladder + precision guards, reliability typing).
   `sections/evaluation.md` — the Evaluation section (design, strata, metrics, controls; results
-  pending adjudication).
+  pending adjudication). `sections/related-work.md` — Related Work (housing tools, beneficial-
+  ownership transparency, entity resolution, algorithmic accountability; citations to finalize).
 - **`cases/`** — worked, WoW-verified case studies:
   - `case-escobar.md` — false *split* reunited (record linkage).
   - `case-miller.md`, `case-levitov.md` — false *merges* kept apart (shared office / shared manager).
