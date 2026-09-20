@@ -42,6 +42,10 @@ allow-direct-references = true
 [tool.hatch.build.targets.wheel]
 packages = ["src/bor"]
 
+# Ship the vendored WoW SQL (bor.build_lwc reads it at runtime).
+[tool.hatch.build.targets.wheel.force-include]
+"src/bor/sql/landlords_with_connections.sql" = "bor/sql/landlords_with_connections.sql"
+
 [dependency-groups]
 dev = ["pytest>=8.0"]
 

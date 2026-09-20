@@ -47,8 +47,13 @@ are owned by shareholders, not a landlord) remove management artifacts a naive i
 
 ```bash
 uv sync                     # installs nlr from its pinned git tag (public; HTTPS, no creds)
-cp .env.example .env        # set PG* for the NYC public-record Postgres
+cp .env.example .env        # set PG* for the NYC public-record Postgres (see docs/data.md)
+uv run python -m bor.build_lwc   # build landlords_with_connections from wow_landlords (~1-2 min)
 ```
+
+BOR depends only on the *data* — a Postgres seeded from JustFix's public `justfixwow` dump — not on
+any WatchlineNYC pipeline; it builds the one derived table (`landlords_with_connections`) itself.
+See [`docs/data.md`](docs/data.md) for the required tables and where they come from.
 
 ## Use
 
