@@ -17,10 +17,11 @@ keywords = [
 # evaluation protocol on top of it. nlr is public → resolves over HTTPS.
 dependencies = [
     "nyc-landlord-resolution @ git+https://github.com/bobflagg/nyc-landlord-resolution.git@v0.1.0",
-    # Pinned to the exact resolution version that produced the published / knowledge-graph
-    # owner-group partition: the model fit is seeded and deterministic within a splink version,
-    # but borderline pairs near the 0.999 threshold can differ across patch releases, so an
-    # unpinned splink drifts a handful of groups. Pin for byte-reproducible results.
+    # Pinned to the resolution version behind the published / knowledge-graph owner-group
+    # partition. This fixes the group count and composition; note the fit is NOT byte-reproducible
+    # even at a fixed version — splink's u-training samples over DuckDB, which is only
+    # approximately seed-stable, so a handful of borderline pairs near the 0.999 threshold jitter
+    # run-to-run (~0.05% of nodes). Pinning removes the larger cross-version drift.
     "splink==4.0.16",
     "pandas>=2.0",
     "networkx>=3.0",       # off-graph connected components for owner groups (no Neo4j)
