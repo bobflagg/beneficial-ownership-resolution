@@ -12,8 +12,10 @@ JustFix's [Who Owns What](https://github.com/JustFixNYC/who-owns-what) (WoW) —
 benchmarking against it, not replacing it — and on the standalone record-linkage engine
 [`nyc-landlord-resolution`](https://github.com/bobflagg/nyc-landlord-resolution) (`nlr`).
 
-> **Status: v1 in progress.** Ships owner-group + deed + benchmark first; the operational-nexus
-> layer (aggregator-masked WCC + Louvain) lands in v1.1. See the roadmap below.
+> **Status: v1 core built & validated.** The beneficial owner group, the deed veil-pierce, and the
+> paired WoW benchmark run off-graph and reproduce the live knowledge graph's partition exactly
+> (see [`docs/parity.md`](docs/parity.md)). The operational-nexus layer (aggregator-masked Louvain)
+> lands in v1.1. See the roadmap.
 
 ## What it resolves
 
@@ -48,29 +50,46 @@ uv sync                     # installs nlr from its pinned git tag (public; HTTP
 cp .env.example .env        # set PG* for the NYC public-record Postgres
 ```
 
-## Use  *(planned v1 API — see roadmap)*
+## Use
 
 ```python
-from bor import resolve_owner_groups
+from bor import resolve_owner_groups, bbl_assignments
 from bor.db import pg_conn
 
 with pg_conn() as conn:
-    groups = resolve_owner_groups(conn)   # {landlord_key: owner_group_id}, off-graph
+    groups = resolve_owner_groups(conn)     # list[OwnerGroup], computed off-graph (no Neo4j)
+
+by_bbl = bbl_assignments(groups)            # {bbl: owner_group_id} — the person-free export key
+biggest = max(groups, key=lambda g: g.building_count)
+print(biggest.owner_group_id, biggest.name, biggest.building_count, biggest.composition)
 ```
+
+Each `OwnerGroup` carries its `members` (landlord identities), attributed rental `bbls`, the full
+`total_bbls` footprint, a `composition` (`identity` / `deed_only` / `deed_bridged`), and a person
+anchor `name`. The deed layer on its own is `bor.deed_edges.deed_edges(conn)`.
 
 ## Evaluate — the paired benchmark against Who Owns What
 
-The evaluation protocol is a core contribution: a paired head-to-head against
-`wow.wow_portfolios` with an **INDETERMINATE** class, a **circularity control**, and a
-**data-vintage control**. It reports where the layers diverge — how many WoW portfolios hide
-more than one owner (a false merge), and how many owners cross WoW portfolios (a false split).
+A paired head-to-head against `wow.wow_portfolios`: where, and in which direction, the owner-group
+partition diverges from WoW's registration clustering (a *divergence* measure, not accuracy —
+adjudication decides who is right). On the current graph:
 
 ```bash
-uv run python -m bor.eval.divergence     # the head-to-head divergence report
-uv run python -m bor.eval.gate           # the WoW gate (does WoW split/over-lump these members?)
+uv run python -m bor.eval.divergence
+# → 760 owners cross WoW portfolios (WoW split them); 616 WoW portfolios hide >1 owner (WoW merged them)
 ```
 
-Worked case studies (reproducible): Croman, Escobar, Miller, Levitov, AXL, Citadel.
+The **WoW gate** is a library check — does WoW genuinely split a group's members into ≥2
+non-aggregator portfolios (a real veil-pierce), or over-lump them on a shared aggregator address?
+
+```python
+from bor.eval.gate import gate_bbls
+result = gate_bbls(conn, member_bbls)       # GateResult(passed, reasons, ...)
+```
+
+The full adjudication protocol (an **INDETERMINATE** class, a **circularity control**, and a
+**data-vintage control**) and the worked case studies (Croman, Escobar, Miller, Levitov, AXL,
+Citadel) are tracked for the release phase — see the roadmap.
 
 ## How it relates to the other repos
 
@@ -85,8 +104,10 @@ BOR's export and is where the Neo4j graph, the conversational agent, and the pub
 
 ## Roadmap
 
-- **v1** — beneficial owner group + deed veil-pierce + the WoW-comparison benchmark, computed
-  off-graph from Postgres; the gold set and the six case studies; reproducible divergence report.
+- **v1 (built & validated)** — beneficial owner group + deed veil-pierce + the paired WoW
+  divergence + the WoW gate, computed off-graph from Postgres and reproducing the live-graph
+  partition ([`docs/parity.md`](docs/parity.md)). *Remaining for v1:* the full stratified
+  adjudication protocol and the packaged case studies.
 - **v1.1** — the operational-nexus layer (aggregator-masked WCC + Louvain), off-graph.
 - **v2 (artifact review)** — DuckDB-native over the public HPD / ACRIS / PLUTO CSVs, so the whole
   thing reproduces with no private database (mirrors `nlr`'s public-CSV roadmap).
@@ -97,7 +118,7 @@ Grounded **entirely in already-public record**; it surfaces and organizes, it do
 Every inferred claim is typed as inferred and carries a standardized caveat — *leads, not
 verdicts*. The merge-vs-split (precision-vs-recall) tradeoff is documented, not hidden. See the
 paper's dual-use reflection; the dataset-release policy for this repo is deliberately scoped to
-match it (a Phase-3 decision, tracked below).
+match it (a Phase-3 decision — see the roadmap).
 
 ## License
 
