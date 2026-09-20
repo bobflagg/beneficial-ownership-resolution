@@ -1,11 +1,12 @@
 """Frozen regression targets, validated against the reference `justfixwow` dump and the live
 WatchlineNYC knowledge graph (see docs/parity.md).
 
-The deed layer is deterministic given the data → exact. Everything downstream of Splink jitters
-~0.05% run-to-run (u-sampling over DuckDB), so those counts are checked with a tolerance.
+All counts are checked with a tolerance. Splink-dependent counts jitter ~0.05% run-to-run
+(u-sampling over DuckDB). The deed layer has no Splink but is still not bit-exact: ACRIS
+latest-deed tiebreaks and data vintage move a handful of edges (observed 941 and 935).
 """
 
-# Deterministic (no Splink) — exact.
+# Deed layer (no Splink, but near- not bit-deterministic — see above).
 DEED_EDGES = 941
 DEED_NODES = 1542
 
