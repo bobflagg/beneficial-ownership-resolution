@@ -1,7 +1,7 @@
 """bor/owner_groups.py — the beneficial owner group, computed off-graph.
 
 The owner-identity partition: *who is the apparent same owner across differently-named LLCs*,
-distinct from the operational nexus (shared-office clustering) and from management. It is the
+distinct from the operational network (shared-office clustering) and from management. It is the
 connected components of the owner-identity edges — ``CONNECTED_BY_SPLINK`` (record-linkage model
 ∪ curated ∪ registered-LLC) ∪ ``CONNECTED_BY_DEED`` (the name-free ACRIS veil-pierce) — with a
 co-op/condo exclusion.

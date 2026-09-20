@@ -11,7 +11,7 @@ Builds on the standalone record-linkage engine ``nlr`` (false-split resolution) 
   * reliability typing (directly-sourced vs. inferred),
   * a paired evaluation protocol against JustFix's Who Owns What.
 
-The operational-nexus layer (aggregator-masked WCC + Louvain) arrives in v1.1.
+The operational-network layer (aggregator-masked WCC + Louvain) arrives in v1.1.
 
 Planned public API (v1):
     resolve_owner_groups(conn) -> {landlord_key: owner_group_id}

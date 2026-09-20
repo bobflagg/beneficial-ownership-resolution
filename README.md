@@ -14,7 +14,7 @@ benchmarking against it, not replacing it — and on the standalone record-linka
 
 > **Status: v1 core built & validated.** The beneficial owner group, the deed veil-pierce, and the
 > paired WoW benchmark run off-graph and reproduce the live knowledge graph's partition exactly
-> (see [`docs/parity.md`](docs/parity.md)). The operational-nexus layer (aggregator-masked Louvain)
+> (see [`docs/parity.md`](docs/parity.md)). The operational-network layer (aggregator-masked Louvain)
 > lands in v1.1. See the roadmap.
 
 ## What it resolves
@@ -34,7 +34,7 @@ Registration clustering fails in two opposite, *asymmetrically harmful* directio
 |---|---|---|---|
 | **Beneficial owner group** | Who *owns* it? | `CONNECTED_BY_SPLINK` ∪ `CONNECTED_BY_DEED` | **v1** |
 | **Deed veil-pierce** | co-owned by conveyance? | ACRIS multi-parcel deed + linked-successor guard | **v1** |
-| **Operational nexus** | What does it *operate through*? | name / address / splink, aggregator-masked (WCC + Louvain) | **v1.1** |
+| **Operational network** | What does it *operate through*? | name / address / splink, aggregator-masked (WCC + Louvain) | **v1.1** |
 | **Management** | Who *runs* it? | `MANAGED_BY` (disclosed agent) | (in WatchlineNYC) |
 
 The **deed veil-pierce** is the signature move: a name-free link from a shared ACRIS deed,
@@ -108,7 +108,7 @@ BOR's export and is where the Neo4j graph, the conversational agent, and the pub
   divergence + the WoW gate, computed off-graph from Postgres and reproducing the live-graph
   partition ([`docs/parity.md`](docs/parity.md)). *Remaining for v1:* the full stratified
   adjudication protocol and the packaged case studies.
-- **v1.1** — the operational-nexus layer (aggregator-masked WCC + Louvain), off-graph.
+- **v1.1** — the operational-network layer (aggregator-masked WCC + Louvain), off-graph.
 - **v2 (artifact review)** — DuckDB-native over the public HPD / ACRIS / PLUTO CSVs, so the whole
   thing reproduces with no private database (mirrors `nlr`'s public-CSV roadmap).
 
