@@ -28,7 +28,12 @@ cross portfolios**), confirmed two ways (on-graph `compare_kg --divergence` and 
 Two caveats while these are freshly lifted:
 - Some **internal cross-references** in these drafts still point at the original WatchlineNYC
   `specs/…` paths (not everything was copied). They'll be reconciled as the paper develops here.
-- The manager-layer figure **1,461** (in `paper-abstract.md`) was **not** re-measured against the
-  current rebuild — it predates the refresh and should be recomputed before it's cited.
+- The manager-layer figures were **re-measured 2026-09-20** against the current KG (they are
+  management/apparent-control metrics, not computed by `bor` — the management layer lives in the
+  WatchlineNYC graph): **1,462** managing agents span ≥2 portfolios (was 1,461), and the owner-group
+  layer covers **27.8%** (47,590 / 171,347) of controlled buildings — still ~28%. Queries:
+  `MATCH (b:Building)-[:MANAGED_BY]->(m:Manager) OPTIONAL MATCH (b)-[:IN_PORTFOLIO]->(p:Portfolio)`
+  → managers with ≥2 distinct `p`; and controlled buildings whose `APPARENT_CONTROL` controller has
+  an `IN_OWNER_GROUP` edge, over all controlled buildings.
 - Supporting design/analysis notes (`ownership-model-spec.md`, `deed-gate-review.md`) were left in
   WatchlineNYC; bring them under `paper/notes/` if you want them here too.
