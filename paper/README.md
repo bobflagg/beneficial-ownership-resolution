@@ -12,6 +12,8 @@ it directly (`python -m bor.eval.divergence`, `docs/parity.md`).
 - **`paper-abstract.md`** — the base variant (systems + evaluation emphasis; COMPASS-leaning).
 - **`eval-protocol.md`** — the evaluation methodology (paired vs Who Owns What, the INDETERMINATE
   class, circularity + data-vintage controls) — itself contribution #5.
+- **`sections/`** — drafted paper-body sections. `sections/evaluation.md` — the Evaluation section
+  (design, strata, metrics, controls; results pending adjudication).
 - **`cases/`** — worked, WoW-verified case studies:
   - `case-escobar.md` — false *split* reunited (record linkage).
   - `case-miller.md`, `case-levitov.md` — false *merges* kept apart (shared office / shared manager).
