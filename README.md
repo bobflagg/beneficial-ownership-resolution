@@ -12,10 +12,10 @@ JustFix's [Who Owns What](https://github.com/JustFixNYC/who-owns-what) (WoW) —
 benchmarking against it, not replacing it — and on the standalone record-linkage engine
 [`nyc-landlord-resolution`](https://github.com/bobflagg/nyc-landlord-resolution) (`nlr`).
 
-> **Status: v1 core built & validated.** The beneficial owner group, the deed veil-pierce, and the
-> paired WoW benchmark run off-graph and reproduce the live knowledge graph's partition exactly
-> (see [`docs/parity.md`](docs/parity.md)). The operational-network layer (aggregator-masked Louvain)
-> lands in v1.1. See the roadmap.
+> **Status: v1 + v1.1 built & validated.** All three layers — beneficial owner group, deed
+> veil-pierce, and operational network — plus the paired WoW benchmark run off-graph and reproduce
+> the live knowledge graph's partition (owner groups 100% of nodes; operational network 99.9% of
+> portfolios, the tail being Louvain — see [`docs/parity.md`](docs/parity.md)). See the roadmap.
 
 ## What it resolves
 
@@ -34,7 +34,7 @@ Registration clustering fails in two opposite, *asymmetrically harmful* directio
 |---|---|---|---|
 | **Beneficial owner group** | Who *owns* it? | `CONNECTED_BY_SPLINK` ∪ `CONNECTED_BY_DEED` | **v1** |
 | **Deed veil-pierce** | co-owned by conveyance? | ACRIS multi-parcel deed + linked-successor guard | **v1** |
-| **Operational network** | What does it *operate through*? | name / address / splink, aggregator-masked (WCC + Louvain) | **v1.1** |
+| **Operational network** | What does it *operate through*? | name / address / splink, aggregator-masked (WCC + Louvain) | **v1.1 ✓** |
 | **Management** | Who *runs* it? | `MANAGED_BY` (disclosed agent) | (in WatchlineNYC) |
 
 The **deed veil-pierce** is the signature move: a name-free link from a shared ACRIS deed,
@@ -67,6 +67,16 @@ print(biggest.owner_group_id, biggest.name, biggest.building_count, biggest.comp
 Each `OwnerGroup` carries its `members` (landlord identities), attributed rental `bbls`, the full
 `total_bbls` footprint, a `composition` (`identity` / `deed_only` / `deed_bridged`), and a person
 anchor `name`. The deed layer on its own is `bor.deed_edges.deed_edges(conn)`.
+
+The **operational network** (the WoW-baseline "what it operates through" layer) is a separate call:
+
+```python
+from bor import resolve_operational_networks
+
+with pg_conn() as conn:
+    nets = resolve_operational_networks(conn)   # list[OperationalNetwork]; WCC + Louvain, off-graph
+# each carries members, bbls, building_count, and split ('wcc' = exact | 'louvain' = oversized tail)
+```
 
 ## Evaluate — the paired benchmark against Who Owns What
 
@@ -108,7 +118,9 @@ BOR's export and is where the Neo4j graph, the conversational agent, and the pub
   divergence + the WoW gate, computed off-graph from Postgres and reproducing the live-graph
   partition ([`docs/parity.md`](docs/parity.md)). *Remaining for v1:* the full stratified
   adjudication protocol and the packaged case studies.
-- **v1.1** — the operational-network layer (aggregator-masked WCC + Louvain), off-graph.
+- **v1.1 (built)** — the operational-network layer (aggregator-masked WCC + Louvain), off-graph.
+  WCC reproduces the KG exactly; the >300-BBL Louvain tail (~a few dozen large operators) is
+  approximate — GDS Louvain is not byte-reproducible ([`docs/parity.md`](docs/parity.md)).
 - **v2 (artifact review)** — DuckDB-native over the public HPD / ACRIS / PLUTO CSVs, so the whole
   thing reproduces with no private database (mirrors `nlr`'s public-CSV roadmap).
 

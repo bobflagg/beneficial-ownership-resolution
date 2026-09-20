@@ -42,3 +42,31 @@ Two consequences:
 
 Downstream figures (e.g. the divergence-vs-WoW counts) are therefore stable to ~99.95%; report them
 as such rather than as exact integers reproducible to the unit.
+
+## Operational-network layer (v1.1)
+
+The operational network (`bor.operational_network`) is WCC(+Louvain) over name ∪ address ∪ splink
+edges, mirroring WatchlineNYC's `:Portfolio`. It has a different reproducibility profile than the
+owner groups, because it uses **two** clustering steps:
+
+- **WCC** (connected components) — deterministic, reproduces exactly.
+- **Louvain** — splits only components whose BBL-sum exceeds `MAX_SIZE = 300`. WatchlineNYC runs
+  GDS's seedless, default-granularity Louvain; BOR runs igraph's weighted `community_multilevel`.
+  These are different implementations and **cannot** byte-match (GDS does not reproduce itself
+  run-to-run either). This affects only the tail of oversized components.
+
+Parity vs the live KG's multi-member Portfolios:
+
+| Metric | Result |
+|---|---|
+| Node universe | **identical** — 30,924 nodes both sides, 0 difference |
+| Portfolios reproduced exactly (identical member set) | **9,662 / 9,672 = 99.90%** |
+| Nodes in an identically-membered portfolio | **30,813 / 30,924 = 99.64%** |
+| Final portfolios > 300 BBLs | **1 (max 424)** — exact |
+| Split origin (BOR) | 9,627 WCC (exact) + 47 Louvain |
+
+So all ≤300-BBL portfolios — the WCC majority — reproduce exactly; the ~10 differing portfolios
+(~111 nodes) are entirely within the Louvain-split oversized tail (a few dozen large operators),
+which is expected and inherent to Louvain, not a defect of the off-graph port. Portfolio ids
+(`PF-<min nodeid>` in BOR, `PF-<run_id>-<n>` in the KG) are not comparable across builds — compare
+by member set / BBL overlap, as above.
