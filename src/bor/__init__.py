@@ -27,5 +27,12 @@ from bor.owner_groups import (
     bbl_assignments,
     OwnerGroup,
 )
+from bor.operational_network import (
+    resolve_operational_networks,
+    OperationalNetwork,
+)
 
-__all__ = ["resolve_owner_groups", "assignments", "bbl_assignments", "OwnerGroup"]
+__all__ = [
+    "resolve_owner_groups", "assignments", "bbl_assignments", "OwnerGroup",
+    "resolve_operational_networks", "OperationalNetwork",
+]

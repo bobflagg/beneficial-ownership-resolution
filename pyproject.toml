@@ -25,17 +25,10 @@ dependencies = [
     "splink==4.0.16",
     "pandas>=2.0",
     "networkx>=3.0",       # off-graph connected components for owner groups (no Neo4j)
+    "igraph>=0.11",        # weighted Louvain for the operational-network oversized-component tail
     "psycopg2-binary>=2.9.12",
     "python-dotenv>=1.0",
     # duckdb comes transitively via nlr; made explicit in v1.1 for the public-CSV path
-]
-
-[project.optional-dependencies]
-# v1.1 — the operational-nexus layer (WCC + Louvain over name/address/splink,
-# aggregator-masked). Off-graph community detection, no Neo4j/GDS.
-operational = [
-    "python-louvain>=0.16",
-    "igraph>=0.11",
 ]
 
 [build-system]
